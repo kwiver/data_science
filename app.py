@@ -53,7 +53,88 @@ def streamlit_app():
     col2.metric("Churn Customer", churn_customer)
     col3.metric("Churn Rate", f"{churn_rate}%")
     col4.metric("Avg Credit Score", avg_credit_score)
-    col5.metric("Avg Estimated Salary", f"${avg_salary:,.0f}%")
+    col5.metric("Avg Estimated Salary", f"${avg_salary:,.0f}")
     
+    # row 1 - Geography & Gender
+    left, right = st.columns(2)
+    with left:
+        st.subheader("Customer Churn Distribtion by Geography")
+        fig_geo = px.histogram(
+            filtered_df,
+            x="Geography",
+            color="Exited",
+            barmode="group",
+            title="Churn rate accross countries"
+        )
+    
+        st.plotly_chart(fig_geo, use_container_width=True)
+
+    with right:
+        st.subheader("Customer Churn Distribtion by Gender")
+        fig_gender = px.histogram(
+            filtered_df,
+            x="Gender",
+            color="Exited",
+            barmode="group",
+            title="Churn rate by Gender"
+        )
+    
+        st.plotly_chart(fig_gender, use_container_width=True)
+        
+    
+    # row 2 - Age and Credit score
+    left, right = st.columns(2)
+    with left:
+        st.subheader("Age: Customer churn vs Non-Churn")
+        fig_age = px.box(
+            filtered_df,
+            x="Exited",
+            y="Age",
+            color="Exited",
+            points="all",
+            title="Age Distributin by Churn"
+        )
+    
+        st.plotly_chart(fig_age, use_container_width=True)
+
+    with right:
+        st.subheader("Customer Churn Distribtion by CreditScore")
+        fig_credit_score = px.histogram(
+            filtered_df,
+            x="CreditScore",
+            color="Exited",
+            title="Churn rate by Credit Score"
+        )
+    
+        st.plotly_chart(fig_credit_score, use_container_width=True)
+
+    # row 3 - NumberOfProduct and Tenure
+    left, right = st.columns(2)
+    with left:
+        st.subheader("Number of Products: Customer churn vs Non-Churn")
+        fig_product = px.histogram(
+            filtered_df,
+            x="NumOfProducts",
+            barmode="group",
+            color="Exited",
+            title="How Products Influence churn"
+        )
+    
+        st.plotly_chart(fig_product, use_container_width=True)
+
+    with right:
+        st.subheader("Tenure: Customer loyalty Indicator")
+        fig_tenure = px.histogram(
+            filtered_df,
+            x="Tenure",
+            color="Exited",
+            title="Tenure Comparison Between churn & Active customer"
+        )
+    
+        st.plotly_chart(fig_tenure, use_container_width=True)
+    
+    st.markdown("---")
+    st.subheader("Data Preview")
+    st.dataframe(filtered_df.head(20))
 
 streamlit_app()
